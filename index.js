@@ -1,4 +1,5 @@
   const http = require('http');
+  var fetch = require('node-fetch');
 
 
   require('dotenv').config({
@@ -37,38 +38,28 @@
 
       const base64data = new Buffer(file.data).toString('base64');
 
-      var options = {
-        host: `api.github.com`,
-        path: `/repos/pouyajoon/simdaxrocks/public/${file.name}`,
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.SIMDAX_ROCKS_GITHUB_TOKEN}`
-        },
-        body: {
-          "content": base64data,
-          "message": "wtf"
-        }
-      };
 
-      console.log('GET', options);
-
-      http.get(options, (a, b, c) => {
-        console.log('STATUS', a, b, c);
-        a.on('data', function(chunk) {
-          //console.log('BODY: ' + chunk);
-          str += chunk;
-        });
-        a.on('end', () => {
-          console.log('No more data in response.');
-          res.send('ok');
+      fetch(`http://api.github.com/repos/pouyajoon/simdaxrocks/contents/public/${file.name}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.SIMDAX_ROCKS_GITHUB_TOKEN}`
+          },
+          body: JSON.stringify({
+            "content": base64data,
+            "message": "wtf"
+          })
+        })
+        .then(function(res2) {
+          return res2.json();
+        }).then(function(json) {
+          console.log(json);
+          res.send(json);
+        }).catch(e => {
+          console.error(e)
+          res.send(e);
         });
 
-      });
-
-
-
-      // res.send(base64data);
     });
   }
 
