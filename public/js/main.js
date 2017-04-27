@@ -17,9 +17,3 @@ const futch = (url, opts, onProgress) => {
         }
     });
 }
-
-
-
-// futch('/upload', { }, (p)=>{
-//     console.log(p);
-// });
