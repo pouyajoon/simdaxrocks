@@ -36,10 +36,13 @@
       const file = req.files.myfile;
       // console.log(file.data);
 
+
+      // fs.writeFileSync(file, content, 'utf8');
+
       const base64data = new Buffer(file.data).toString('base64');
 
 
-      fetch(`http://api.github.com/repos/pouyajoon/simdaxrocks/contents/public/${file.name}`, {
+      fetch(`http://api.github.com/repos/pouyajoon/simdaxrocks/contents/public/files/${file.name}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
